@@ -18,10 +18,9 @@ return {
           "intelephense",
           "ts_ls",
         },
-        automatic_enable = true, -- auto vim.lsp.enable() anything Mason installs
+        automatic_enable = true,
       })
 
-      -- Per-server overrides (optional, only where you need custom settings)
       vim.lsp.config("lua_ls", {
         settings = {
           Lua = {
@@ -30,7 +29,19 @@ return {
         },
       })
 
-      -- Keymaps, set once an LSP actually attaches to a buffer
+      vim.lsp.config("clangd", {
+        cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    -- This tells clangd it is allowed to call your MinGW compilers
+    "--query-driver=C:\\MinGW\\bin\\gcc.exe,C:\\MinGW\\bin\\g++.exe"
+  },
+  capabilities = {
+    offsetEncoding = { "utf-16" },
+  }
+})
+
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local opts = { buffer = args.buf }
