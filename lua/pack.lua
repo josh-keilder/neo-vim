@@ -60,7 +60,7 @@ MiniExtra.setup()
 
 -- keymaps
 vim.keymap.set("n", "<leader>ff", function() MiniPick.builtin.files() end, { desc = "Mini File Picker" })
-vim.keymap.set("n", "<leader>fg", function() MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Grep word/Search word" })
+vim.keymap.set("n", "<leader>fg", MiniPick.builtin.grep_live, { desc = "Grep word/Search word" })
 vim.keymap.set("n", "<leader>fh", function() MiniPick.builtin.help() end, { desc = "Mini Help" })
 
 vim.keymap.set("n", "<leader>fd", function() MiniExtra.pickers.diagnostic() end, { desc = "Mini Picker Diagnostics" })
