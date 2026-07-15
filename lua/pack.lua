@@ -6,9 +6,18 @@ vim.pack.add({
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/mason-org/mason.nvim",
     "https://github.com/tpope/vim-fugitive",
+    "https://github.com/stevearc/conform.nvim",
+    "https://github.com/nvim-lualine/lualine.nvim",
+    "https://github.com/windwp/nvim-autopairs",
 })
 
--- mini files ----
+---- lualine ----
+require('lualine').setup()
+
+---- autopairs ----
+require('nvim-autopairs').setup()
+
+---- mini files ----
 local MiniFiles = require("mini.files")
 MiniFiles.setup({
     mappings = {
@@ -35,12 +44,12 @@ require("mini.notify").setup({
     },
 })
 
---- mini cmdline completion ---
+---- mini cmdline completion ----
 require("mini.cmdline").setup({
     autocorrect = { enable = false }
 })
 
---- mini surround ---
+---- mini surround ----
 require("mini.surround").setup()
 -- Default Keymaps
 -- | `sa` | Add surrounding or Direct with 'saiw' |
@@ -58,7 +67,7 @@ local MiniExtra = require("mini.extra")
 MiniPick.setup()
 MiniExtra.setup()
 
--- keymaps
+---- keymaps ----
 vim.keymap.set("n", "<leader>ff", function() MiniPick.builtin.files() end, { desc = "Mini File Picker" })
 vim.keymap.set("n", "<leader>fg", MiniPick.builtin.grep_live, { desc = "Grep word/Search word" })
 vim.keymap.set("n", "<leader>fh", function() MiniPick.builtin.help() end, { desc = "Mini Help" })
@@ -66,14 +75,14 @@ vim.keymap.set("n", "<leader>fh", function() MiniPick.builtin.help() end, { desc
 vim.keymap.set("n", "<leader>fd", function() MiniExtra.pickers.diagnostic() end, { desc = "Mini Picker Diagnostics" })
 vim.keymap.set("n", "<leader>fk", function() MiniExtra.pickers.keymaps() end, { desc = 'Search keymaps' })
 
---- mini completions --- 
+---- mini completions ----
 require("mini.completion").setup({
     lsp_completion = {
         auto_setup = true,
     }
 })
 
---- mini snippets ---
+---- mini snippets ----
 local MiniSnippets = require("mini.snippets")
 MiniSnippets.setup({
     snippets = {
@@ -82,7 +91,7 @@ MiniSnippets.setup({
 })
 MiniSnippets.start_lsp_server({ match = false })
 
---- mini diff and fugitive ---
+---- mini diff and fugitive ----
 local MiniDiff = require("mini.diff")
 MiniDiff.setup({
 	source = MiniDiff.gen_source.git({ index = false }),
