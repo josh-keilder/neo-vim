@@ -31,3 +31,15 @@ vim.keymap.set("n", "<leader>u", function()
     vim.cmd.packadd("nvim.undotree")
     require("undotree").open()
 end, { desc = "Toggle Builtin Undotree" })
+
+-- Navigate between buffer tabs
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+
+-- Close current buffer tab
+vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
+
+-- Move to specific buffers by number
+vim.keymap.set("n", "<leader>b1", "<cmd>buffer 1<CR>", { desc = "Go to buffer 1" })
+vim.keymap.set("n", "<leader>b2", "<cmd>buffer 2<CR>", { desc = "Go to buffer 2" })
+vim.keymap.set("n", "<leader>b3", "<cmd>buffer 3<CR>", { desc = "Go to buffer 3" })

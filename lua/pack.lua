@@ -8,14 +8,21 @@ vim.pack.add({
     "https://github.com/tpope/vim-fugitive",
     "https://github.com/stevearc/conform.nvim",
     "https://github.com/nvim-lualine/lualine.nvim",
-    "https://github.com/windwp/nvim-autopairs",
+    "https://github.com/lewis6991/gitsigns.nvim",
+    "https://github.com/folke/todo-comments.nvim",
 })
+
+---- gitsigns setup ----
+require("gitsigns").setup()
+
+---- todo-comments ----
+require("todo-comments").setup()
 
 ---- lualine ----
 require('lualine').setup()
 
 ---- autopairs ----
-require('nvim-autopairs').setup()
+require('mini.pairs').setup()
 
 ---- mini files ----
 local MiniFiles = require("mini.files")
@@ -34,9 +41,13 @@ vim.keymap.set("n", "<leader>-", function()
     MiniFiles.reveal_cwd()
 end, { desc = "Toggle into currently opened file" })
 
+---- mini tabline ----
+require("mini.tabline").setup()
+
+
 ---- mini notify ----
 require("mini.notify").setup({
-	-- only show messages
+    -- only show messages
     content = {
         format = function(notif)
             return notif.msg
@@ -94,7 +105,7 @@ MiniSnippets.start_lsp_server({ match = false })
 ---- mini diff and fugitive ----
 local MiniDiff = require("mini.diff")
 MiniDiff.setup({
-	source = MiniDiff.gen_source.git({ index = false }),
+    source = MiniDiff.gen_source.git({ index = false }),
 })
 
 vim.keymap.set("n", "<leader>gg", "<cmd>tabnew | Git | only<cr>", { desc = "Fugitive Full Page New Tab" })
