@@ -19,8 +19,31 @@ return {
         cmd = "Neotree",
         init = function()
             vim.api.nvim_create_autocmd("VimEnter", {
-                desc = "Open the explorer sidebar without taking focus",
-                callback = function() vim.cmd("Neotree show left") end,
+                desc = "Open and focus the explorer",
+                callback = function()
+                    for _, bufferNumber in ipairs(vim.api.nvim_list_bufs()) do
+                        if vim.fn.isdirectory(vim.api.nvim_buf_get_name(bufferNumber)) == 1 then
+                            Snacks.bufdelete({ buf = bufferNumber, force = true })
+                        end
+                    end
+                    vim.cmd("Neotree focus left")
+                end,
+            })
+            vim.api.nvim_create_autocmd("BufReadPost", {
+                desc = "Close the empty startup buffer once a real file opens",
+                callback = function(event)
+                    for _, bufferNumber in ipairs(vim.api.nvim_list_bufs()) do
+                        local isEmptyStartupBuffer = bufferNumber ~= event.buf
+                            and vim.bo[bufferNumber].buflisted
+                            and vim.bo[bufferNumber].buftype == ""
+                            and vim.api.nvim_buf_get_name(bufferNumber) == ""
+                            and not vim.bo[bufferNumber].modified
+                            and vim.api.nvim_buf_line_count(bufferNumber) == 1
+                            and vim.api.nvim_buf_get_lines(bufferNumber, 0, 1, false)[1] == ""
+                            and vim.fn.bufwinid(bufferNumber) == -1
+                        if isEmptyStartupBuffer then vim.api.nvim_buf_delete(bufferNumber, {}) end
+                    end
+                end,
             })
         end,
         keys = {
