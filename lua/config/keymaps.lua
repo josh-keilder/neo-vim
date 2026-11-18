@@ -37,9 +37,24 @@ vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 
 -- Close current buffer tab
-vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
+vim.keymap.set("n", "<leader>bd", function() Snacks.bufdelete() end, { desc = "Delete buffer" })
 
 -- Move to specific buffers by number
 vim.keymap.set("n", "<leader>b1", "<cmd>buffer 1<CR>", { desc = "Go to buffer 1" })
 vim.keymap.set("n", "<leader>b2", "<cmd>buffer 2<CR>", { desc = "Go to buffer 2" })
 vim.keymap.set("n", "<leader>b3", "<cmd>buffer 3<CR>", { desc = "Go to buffer 3" })
+
+-- VS Code style save, undo, cut, copy and paste
+vim.keymap.set({ "n", "i", "x" }, "<C-s>", "<cmd>write<CR>", { desc = "Save file" })
+vim.keymap.set("n", "<C-z>", "u", { desc = "Undo" })
+vim.keymap.set("i", "<C-z>", "<C-o>u", { desc = "Undo" })
+vim.keymap.set("x", "<C-c>", [["+y]], { desc = "Copy selection" })
+vim.keymap.set("x", "<C-x>", [["+d]], { desc = "Cut selection" })
+vim.keymap.set("n", "<C-v>", [["+P]], { desc = "Paste" })
+vim.keymap.set("x", "<C-v>", [["+P]], { desc = "Paste over selection" })
+vim.keymap.set({ "i", "c" }, "<C-v>", "<C-r>+", { desc = "Paste" })
+vim.keymap.set({ "n", "i", "x" }, "<C-a>", "<Esc>ggVG", { desc = "Select all" })
+
+-- LSP
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+vim.keymap.set("n", "df", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
