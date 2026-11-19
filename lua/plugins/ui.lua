@@ -16,18 +16,11 @@ return {
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",
         dependencies = { "nvim-lua/plenary.nvim", "MunifTanjim/nui.nvim", "nvim-tree/nvim-web-devicons" },
-        cmd = "Neotree",
+        lazy = false,
         init = function()
             vim.api.nvim_create_autocmd("VimEnter", {
                 desc = "Open and focus the explorer",
-                callback = function()
-                    for _, bufferNumber in ipairs(vim.api.nvim_list_bufs()) do
-                        if vim.fn.isdirectory(vim.api.nvim_buf_get_name(bufferNumber)) == 1 then
-                            Snacks.bufdelete({ buf = bufferNumber, force = true })
-                        end
-                    end
-                    vim.cmd("Neotree focus left")
-                end,
+                callback = function() vim.cmd("Neotree focus left") end,
             })
             vim.api.nvim_create_autocmd("BufReadPost", {
                 desc = "Close the empty startup buffer once a real file opens",
