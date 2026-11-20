@@ -5,7 +5,32 @@ return {
         lazy = false,
         priority = 1000,
         config = function()
-            require("github-theme").setup({})
+            local gitModified = "#79b8ff"
+            local gitAdded = "#34d058"
+            local gitUntracked = "#34d058"
+            local gitDeleted = "#ea4a5a"
+            require("github-theme").setup({
+                groups = {
+                    all = {
+                        -- VS Code "GitHub Dark" git decoration colors.
+                        NeoTreeGitModified = { fg = gitModified },
+                        NeoTreeGitUnstaged = { fg = gitModified },
+                        NeoTreeGitStaged = { fg = gitModified },
+                        NeoTreeGitAdded = { fg = gitAdded },
+                        NeoTreeGitUntracked = { fg = gitUntracked },
+                        NeoTreeGitRenamed = { fg = gitUntracked },
+                        NeoTreeGitDeleted = { fg = gitDeleted },
+                        NeoTreeGitIgnored = { fg = "#6a737d" },
+                        NeoTreeGitConflict = { fg = "#ffab70" },
+                        GitSignsAdd = { fg = gitUntracked },
+                        GitSignsUntracked = { fg = gitUntracked },
+                        GitSignsChange = { fg = gitModified },
+                        GitSignsChangedelete = { fg = gitModified },
+                        GitSignsDelete = { fg = gitDeleted },
+                        GitSignsTopdelete = { fg = gitDeleted },
+                    },
+                },
+            })
             vim.cmd.colorscheme("github_dark")
         end,
     },
@@ -45,6 +70,9 @@ return {
         },
         opts = {
             close_if_last_window = true,
+            event_handlers = {
+                { event = "git_status_changed", handler = function() vim.cmd.redrawtabline() end },
+            },
             window = { width = 32 },
             filesystem = {
                 follow_current_file = { enabled = true },
@@ -65,6 +93,14 @@ return {
                 close_command = function(bufferNumber) Snacks.bufdelete(bufferNumber) end,
                 right_mouse_command = function(bufferNumber) Snacks.bufdelete(bufferNumber) end,
                 diagnostics = "nvim_lsp",
+                name_formatter = function(buffer)
+                    local gitStatus = require("neo-tree.git").find_existing_status_code(
+                        require("neo-tree.utils").normalize_path(buffer.path)
+                    )
+                    if type(gitStatus) == "table" then gitStatus = gitStatus[1] end
+                    local hasGitChange = gitStatus ~= nil and gitStatus ~= "!"
+                    return hasGitChange and buffer.name .. " ●" or buffer.name
+                end,
                 always_show_bufferline = true,
                 offsets = {
                     { filetype = "neo-tree", text = "Explorer", highlight = "Directory", text_align = "left", separator = true },
